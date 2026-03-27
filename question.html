@@ -70,26 +70,21 @@
     </div>
     <div class="question-content">
       <div class="question-text" id="q-text">キャンパスで一番好きな場所はどこですか？</div>
-      <div class="question-from" id="q-from">— 視聴者さんより</div>
     </div>
   </div>
-  <script>
-    // question-data.json を3秒おきに読み込み、変更があれば表示を更新
-    let lastText = '';
-    async function poll() {
-      try {
-        const res = await fetch('question-data.json?t=' + Date.now());
-        const data = await res.json();
-        const key = data.text + data.from;
-        if (key !== lastText) {
-          lastText = key;
-          document.getElementById('q-text').textContent = data.text;
-          document.getElementById('q-from').textContent = data.from ? '— ' + data.from : '';
-        }
-      } catch (e) { /* 読み込み失敗時はそのまま維持 */ }
-    }
-    setInterval(poll, 3000);
-    poll();
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+    import { firebaseConfig } from './firebase-config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    onValue(ref(db, 'question'), (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+      document.getElementById('q-text').textContent = data.text || '';
+    });
   </script>
 </body>
 </html>

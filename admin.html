@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>質問管理</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', 'Noto Sans JP', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 24px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 24px;
+      color: #1a2a5e;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #555;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-family: inherit;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #4a8fe7;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background: #1a2a5e;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:active { background: #0f1a3e; }
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+    .status.ok { display: block; background: #e8f5e9; color: #2e7d32; }
+    .status.err { display: block; background: #fbe9e7; color: #c62828; }
+    .current {
+      margin-top: 24px;
+      padding: 16px;
+      background: #fff;
+      border-radius: 8px;
+      border-left: 4px solid #4a8fe7;
+    }
+    .current-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    .current-text {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .current-from {
+      font-size: 14px;
+      color: #888;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>質問管理</h1>
+
+  <label for="text">質問テキスト</label>
+  <textarea id="text" placeholder="質問を入力"></textarea>
+
+  <button id="send">送信</button>
+  <div class="status" id="status"></div>
+
+  <div class="current">
+    <div class="current-label">現在表示中</div>
+    <div class="current-text" id="cur-text">—</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+    import { firebaseConfig } from './firebase-config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const qRef = ref(db, 'question');
+
+    // 現在の値を表示
+    onValue(qRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+      document.getElementById('cur-text').textContent = data.text || '—';
+    });
+
+    // 送信
+    document.getElementById('send').addEventListener('click', async () => {
+      const text = document.getElementById('text').value.trim();
+      if (!text) return;
+      const status = document.getElementById('status');
+      try {
+        await set(qRef, { text });
+        status.className = 'status ok';
+        status.textContent = '送信しました';
+        document.getElementById('text').value = '';
+      } catch (e) {
+        status.className = 'status err';
+        status.textContent = 'エラー: ' + e.message;
+      }
+      setTimeout(() => { status.className = 'status'; }, 3000);
+    });
+  </script>
+</body>
+</html>
