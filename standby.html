@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>待機画面</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 60%, var(--color-primary-light) 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    .logo {
+      height: 60px;
+    }
+
+    .event-title {
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--color-white);
+      letter-spacing: 4px;
+      line-height: 1.4;
+    }
+
+    .divider {
+      width: 80px;
+      height: 3px;
+      background: var(--color-accent);
+      border-radius: 2px;
+    }
+
+    /* ▼ メッセージ（切り替え用） */
+    .message {
+      font-size: 30px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 6px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    .sub-info {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 3px;
+    }
+
+    /* 背景装飾 */
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .bg-circle-1 {
+      width: 700px;
+      height: 700px;
+      top: -150px;
+      right: -150px;
+    }
+
+    .bg-circle-2 {
+      width: 500px;
+      height: 500px;
+      bottom: -100px;
+      left: -100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-circle bg-circle-1"></div>
+  <div class="bg-circle bg-circle-2"></div>
+
+  <div class="container">
+    <img class="logo" src="TDU_logo_B2白TDU.png" alt="東京電機大学">
+    <div class="event-title">オンライン<br>キャンパスツアー</div>
+    <div class="divider"></div>
+
+    <!-- ▼ 状況に応じてメッセージを切り替え -->
+    <div class="message">まもなく始まります</div>
+    <!-- <div class="message">しばらくお待ちください</div> -->
+    <!-- <div class="message">中継準備中です</div> -->
+
+    <div class="sub-info">東京電機大学 学生アンバサダー</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>質問表示</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .question-box {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1200px;
+      animation: slideInUp 0.5s ease-out forwards;
+    }
+
+    .question-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--color-accent);
+      color: var(--color-white);
+      padding: 10px 28px;
+      font-size: 22px;
+      font-weight: 700;
+      border-radius: 8px 8px 0 0;
+      letter-spacing: 2px;
+    }
+
+    .question-header .icon {
+      font-size: 24px;
+    }
+
+    .question-content {
+      background: var(--color-bg-overlay);
+      padding: 32px 40px;
+      border-radius: 0 8px 8px 8px;
+      border-top: 3px solid var(--color-accent);
+      backdrop-filter: blur(10px);
+    }
+
+    .question-text {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--color-white);
+      line-height: 1.5;
+      letter-spacing: 1px;
+    }
+
+    .question-text::before {
+      content: "Q. ";
+      color: var(--color-accent);
+      font-weight: 900;
+    }
+
+    .question-from {
+      margin-top: 12px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="question-box">
+    <div class="question-header">
+      <span class="icon">💬</span>
+      <span>チャットからの質問</span>
+    </div>
+    <div class="question-content">
+      <div class="question-text" id="q-text">キャンパスで一番好きな場所はどこですか？</div>
+      <div class="question-from" id="q-from">— 視聴者さんより</div>
+    </div>
+  </div>
+  <script>
+    // question-data.json を3秒おきに読み込み、変更があれば表示を更新
+    let lastText = '';
+    async function poll() {
+      try {
+        const res = await fetch('question-data.json?t=' + Date.now());
+        const data = await res.json();
+        const key = data.text + data.from;
+        if (key !== lastText) {
+          lastText = key;
+          document.getElementById('q-text').textContent = data.text;
+          document.getElementById('q-from').textContent = data.from ? '— ' + data.from : '';
+        }
+      } catch (e) { /* 読み込み失敗時はそのまま維持 */ }
+    }
+    setInterval(poll, 3000);
+    poll();
+  </script>
+</body>
+</html>

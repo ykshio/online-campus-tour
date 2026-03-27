@@ -1,0 +1,243 @@
+/* ===================================
+   電大オンラインキャンパスツアー
+   OBSオーバーレイ 共通スタイル
+   =================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+:root {
+  /* カラーパレット（大学カラー：紺・白ベース） */
+  --color-primary: #1a2a5e;       /* 紺（メイン） */
+  --color-primary-dark: #0f1a3e;  /* 濃紺 */
+  --color-primary-light: #2a3f7e; /* 明るめ紺 */
+  --color-accent: #4a8fe7;        /* アクセント青 */
+  --color-white: #ffffff;
+  --color-text: #ffffff;
+  --color-text-dark: #1a2a5e;
+  --color-bg-overlay: rgba(26, 42, 94, 0.92);
+  --color-bg-glass: rgba(26, 42, 94, 0.85);
+
+  /* フォント */
+  --font-main: 'Noto Sans JP', sans-serif;
+
+  /* サイズ */
+  --canvas-width: 1920px;
+  --canvas-height: 1080px;
+}
+
+/* リセット */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: var(--canvas-width);
+  height: var(--canvas-height);
+  overflow: hidden;
+  font-family: var(--font-main);
+  background: transparent;
+  color: var(--color-text);
+}
+
+/* ===================================
+   共通アニメーション
+   =================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes expandWidth {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ===================================
+   下部テロップ（lower-third）共通
+   =================================== */
+
+.lower-third {
+  position: absolute;
+  bottom: 80px;
+  left: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+/* 場所名ラベル */
+.lower-third .location {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  padding: 10px 28px;
+  font-size: 28px;
+  font-weight: 700;
+  border-radius: 6px 6px 0 0;
+  width: fit-content;
+  animation: slideInLeft 0.6s ease-out 0.1s both;
+}
+
+/* 名前バー */
+.lower-third .name-bar {
+  display: flex;
+  align-items: stretch;
+  animation: slideInLeft 0.6s ease-out 0.25s both;
+}
+
+.lower-third .role {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 14px 24px;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  border-radius: 0 0 0 6px;
+}
+
+.lower-third .role:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.lower-third .name {
+  background: var(--color-white);
+  color: var(--color-text-dark);
+  padding: 14px 36px;
+  font-size: 32px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  border-radius: 0 6px 6px 0;
+  border-left: 3px solid var(--color-accent);
+}
+
+/* セクションタイトルバー */
+.lower-third .section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-bg-overlay);
+  color: var(--color-white);
+  padding: 16px 36px;
+  font-size: 30px;
+  font-weight: 700;
+  border-radius: 6px;
+  border-left: 5px solid var(--color-accent);
+  letter-spacing: 2px;
+  animation: slideInLeft 0.6s ease-out 0.1s both;
+}
+
+/* アクセントライン */
+.lower-third .accent-line {
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
+  animation: expandWidth 0.5s ease-out 0.5s both;
+  border-radius: 2px;
+}
+
+/* ===================================
+   OBS個別配置用
+   ブラウザソースのサイズに合わせて
+   下部に表示。OBS側で位置・サイズ調整
+   =================================== */
+
+body.source-fit {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+body.source-fit .lower-third {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  width: 100%;
+}
+
+/* ===================================
+   座談会用テロップ（2段: 学部学科 + 名前）
+   =================================== */
+
+.panel-card {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.panel-card .dept {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 10px 24px;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 6px 6px 0 0;
+  text-align: center;
+}
+
+.panel-card .name {
+  background: var(--color-white);
+  color: var(--color-text-dark);
+  padding: 14px 24px;
+  font-size: 40px;
+  font-weight: 900;
+  border-radius: 0 0 6px 6px;
+  border-top: 3px solid var(--color-accent);
+  text-align: center;
+}
